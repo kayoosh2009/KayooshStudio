@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0; overflow:hidden; background:#000;">
+  <video id="video" autoplay muted style="display:none;"></video>
+  <canvas id="canvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+  <script>
+    const v = document.getElementById('video');
+    const c = document.getElementById('canvas');
+    const ctx = c.getContext('2d');
+
+    async function setup() {
+      // Подгружаем "мозги" (модели)
+      await faceapi.nets.tinyFaceDetector.loadFromUri('https://raw.githubusercontent.com/vladmandic/face-api/master/model/');
+      const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+      v.srcObject = stream;
+      v.onloadedmetadata = () => {
+        c.width = v.videoWidth; c.height = v.videoHeight;
+        detect();
+      };
+    }
+
+    async function detect() {
+      const results = await faceapi.detectAllFaces(v, new faceapi.TinyFaceDetectorOptions());
+      ctx.drawImage(v, 0, 0); // Рисуем видео
+      results.forEach(f => {
+        ctx.fillStyle = "black";
+        // Рисуем тот самый квадрат
+        ctx.fillRect(f.box.x, f.box.y, f.box.width, f.box.height);
+      });
+      requestAnimationFrame(detect);
+    }
+    setup();
+  </script>
+</body>
+</html>
