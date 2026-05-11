@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Бутылки</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Unbounded:wght@300;600;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --border: #2a2a35;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --green: #22c55e;
+    --green-dim: #16a34a33;
+    --red: #ef4444;
+    --red-dim: #dc262633;
+    --accent: #a78bfa;
+    --accent-dim: #7c3aed22;
+    --gold: #f59e0b;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 20px 0;
+    gap: 12px;
+  }
+
+  .app-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.2;
+    flex: 1;
+  }
+
+  .earnings-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    text-align: right;
+    min-width: 130px;
+  }
+
+  .earnings-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .earnings-total {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .earnings-total span {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .earnings-breakdown {
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.6;
+  }
+
+  .earnings-breakdown b {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  /* ── MAIN COUNTER ── */
+  .counter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 20px 24px;
+    flex: 0 0 auto;
+  }
+
+  .counter-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .counter-ring {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 14px;
+  }
+
+  .counter-ring svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg { fill: none; stroke: var(--surface2); stroke-width: 6; }
+
+  .ring-fill {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 502;
+    stroke-dashoffset: 502;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 0 8px var(--accent));
+  }
+
+  .counter-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .counter-num {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 52px;
+    line-height: 1;
+    color: var(--text);
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+
+  .counter-num.bump {
+    transform: scale(1.12);
+    opacity: 0.8;
+  }
+
+  .counter-sub {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .money-hint {
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 0.04em;
+    text-align: center;
+    opacity: 0.9;
+  }
+
+  /* ── BUTTONS ── */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 8px 20px 28px;
+  }
+
+  .btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+    -webkit-user-select: none;
+    user-select: none;
+    line-height: 1;
+    padding-bottom: 2px;
+  }
+
+  .btn:active { transform: scale(0.88); opacity: 0.85; }
+
+  .btn-add {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 0 24px #22c55e55, 0 4px 16px #22c55e44;
+  }
+
+  .btn-sub {
+    background: var(--red);
+    color: #fff;
+    box-shadow: 0 0 24px #ef444455, 0 4px 16px #ef444444;
+  }
+
+  .btn-add:active { box-shadow: 0 0 12px #22c55e44; }
+  .btn-sub:active { box-shadow: 0 0 12px #ef444444; }
+
+  .btn-center-info {
+    text-align: center;
+    flex: 0 0 60px;
+  }
+
+  .btn-center-info .icon { font-size: 24px; opacity: 0.25; }
+  .btn-center-info .lbl { font-size: 8px; color: var(--muted); letter-spacing: 0.06em; display: block; margin-top: 2px; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 20px;
+  }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    display: flex;
+    gap: 0;
+    padding: 16px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stats-strip::-webkit-scrollbar { display: none; }
+
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    text-align: center;
+    min-width: 80px;
+    position: relative;
+  }
+
+  .stat-card + .stat-card { margin-left: 10px; }
+
+  .stat-val {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .stat-lbl {
+    font-size: 8px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 4px;
+  }
+
+  .stat-dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  /* ── CHART ── */
+  .chart-section {
+    padding: 16px 20px 20px;
+    flex: 1;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .chart-title {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .chart-badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid var(--accent)44;
+    font-size: 8px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 12px 10px;
+    overflow: hidden;
+  }
+
+  canvas#chart {
+    width: 100% !important;
+    display: block;
+  }
+
+  /* ── BOTTOM ACTIONS ── */
+  .bottom-actions {
+    display: flex;
+    gap: 10px;
+    padding: 0 20px 28px;
+  }
+
+  .action-btn {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .action-btn:active {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .action-btn.danger:active {
+    background: var(--red-dim);
+    color: var(--red);
+    border-color: var(--red)44;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 11px;
+    color: var(--text);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    white-space: nowrap;
+    z-index: 100;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── CONFIRM MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0d0d0fcc;
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px 24px 0 0;
+    padding: 28px 24px 36px;
+    width: 100%;
+    max-width: 480px;
+    transform: translateY(40px);
+    transition: transform 0.25s cubic-bezier(0.34,1.2,0.64,1);
+  }
+
+  .modal-overlay.show .modal { transform: translateY(0); }
+
+  .modal h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .modal p {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .modal-btns {
+    display: flex;
+    gap: 10px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .modal-btn:active { opacity: 0.75; }
+
+  .modal-btn.cancel {
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .modal-btn.confirm-red {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .modal-btn.confirm-green {
+    background: var(--green);
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="app-title">🍶<br>Хранилище<br>бутылок</div>
+  <div class="earnings-panel">
+    <div class="earnings-label">Всего заработано</div>
+    <div class="earnings-total"><span>₪</span><span id="totalEarnings">0.00</span></div>
+    <div class="earnings-breakdown">
+      <b id="storedMoney">₪0.00</b> хранится<br>
+      <b id="returnedMoney">₪0.00</b> сдано
+    </div>
+  </div>
+</header>
+
+<!-- COUNTER -->
+<div class="counter-section">
+  <div class="counter-label">Сейчас на хранении</div>
+  <div class="counter-ring">
+    <svg viewBox="0 0 180 180">
+      <circle class="ring-bg" cx="90" cy="90" r="80"/>
+      <circle class="ring-fill" id="ringFill" cx="90" cy="90" r="80"/>
+    </svg>
+    <div class="counter-inner">
+      <div class="counter-num" id="countDisplay">0</div>
+      <div class="counter-sub">бутылок</div>
+    </div>
+  </div>
+  <div class="money-hint" id="moneyHint">≈ ₪0.00 · 0.3₪ за шт.</div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <button class="btn btn-sub" id="btnSub" onclick="changeCount(-1)">−</button>
+  <div class="btn-center-info">
+    <div class="icon">🔄</div>
+    <span class="lbl">±1 бут.</span>
+  </div>
+  <button class="btn btn-add" id="btnAdd" onclick="changeCount(1)">+</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-card">
+    <div class="stat-dot" style="background:var(--green)"></div>
+    <div class="stat-val" id="statTotal">0</div>
+    <div class="stat-lbl">Всего сдано</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-dot" style="background:var(--accent)"></div>
+    <div class="stat-val" id="statMax">0</div>
+    <div class="stat-lbl">Рекорд</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-dot" style="background:var(--gold)"></div>
+    <div class="stat-val" id="statWeeks">0</div>
+    <div class="stat-lbl">Недель</div>
+  </div>
+</div>
+
+<!-- CHART -->
+<div class="chart-section">
+  <div class="chart-header">
+    <div class="chart-title">История по неделям</div>
+    <div class="chart-badge">Бутылки</div>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="chart" height="160"></canvas>
+  </div>
+</div>
+
+<!-- BOTTOM ACTIONS -->
+<div class="bottom-actions">
+  <button class="action-btn" onclick="markReturned()">✅ Сдать бутылки</button>
+  <button class="action-btn danger" onclick="showResetModal()">🗑 Сброс</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- RESET MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <h2>Сбросить всё?</h2>
+    <p>Счётчик, история и статистика будут удалены навсегда. Это действие необратимо.</p>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeModal('resetModal')">Отмена</button>
+      <button class="modal-btn confirm-red" onclick="doReset()">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<!-- RETURN MODAL -->
+<div class="modal-overlay" id="returnModal">
+  <div class="modal">
+    <h2>Сдать <span id="returnCount">0</span> бутылок?</h2>
+    <p>Текущие бутылки будут помечены как сданные, счётчик обнулится. Заработок будет добавлен в историю.</p>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeModal('returnModal')">Отмена</button>
+      <button class="modal-btn confirm-green" onclick="doReturn()">Подтвердить</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const PRICE = 0.3;
+const KEY = 'bottle_v2';
+
+function loadData() {
+  try {
+    return JSON.parse(localStorage.getItem(KEY)) || defaultData();
+  } catch { return defaultData(); }
+}
+
+function defaultData() {
+  return {
+    current: 0,
+    totalReturned: 0,
+    maxEver: 0,
+    moneyReturned: 0,
+    weeks: [],          // [{label, count, date}]
+  };
+}
+
+function saveData(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+
+let data = loadData();
+let chart;
+
+function getWeekLabel(date) {
+  const d = date || new Date();
+  const yr = d.getFullYear();
+  const start = new Date(yr, 0, 1);
+  const wk = Math.ceil(((d - start) / 86400000 + start.getDay() + 1) / 7);
+  return `Нед ${wk}`;
+}
+
+function getCurrentWeekKey() {
+  const d = new Date();
+  const yr = d.getFullYear();
+  const start = new Date(yr, 0, 1);
+  const wk = Math.ceil(((d - start) / 86400000 + start.getDay() + 1) / 7);
+  return `${yr}-W${wk}`;
+}
+
+function updateUI() {
+  const c = data.current;
+  const money = (c * PRICE).toFixed(2);
+  const retMoney = data.moneyReturned.toFixed(2);
+  const total = (c * PRICE + data.moneyReturned).toFixed(2);
+
+  document.getElementById('countDisplay').textContent = c;
+  document.getElementById('moneyHint').textContent = `≈ ₪${money} · 0.3₪ за шт.`;
+  document.getElementById('totalEarnings').textContent = total;
+  document.getElementById('storedMoney').textContent = `₪${money}`;
+  document.getElementById('returnedMoney').textContent = `₪${retMoney}`;
+
+  document.getElementById('statTotal').textContent = data.totalReturned;
+  document.getElementById('statMax').textContent = data.maxEver;
+  document.getElementById('statWeeks').textContent = data.weeks.length;
+
+  // Ring: scale 0..100 bottles = full ring
+  const pct = Math.min(c / 100, 1);
+  const dash = 502;
+  document.getElementById('ringFill').style.strokeDashoffset = dash - pct * dash;
+
+  updateChart();
+}
+
+function bump(dir) {
+  const el = document.getElementById('countDisplay');
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 200);
+}
+
+function changeCount(delta) {
+  const next = data.current + delta;
+  if (next < 0) { showToast('Нельзя меньше 0'); return; }
+  data.current = next;
+  if (next > data.maxEver) data.maxEver = next;
+
+  // Log to current week
+  const wkey = getCurrentWeekKey();
+  const label = getWeekLabel();
+  const idx = data.weeks.findIndex(w => w.key === wkey);
+  if (idx >= 0) {
+    data.weeks[idx].count = next;
+  } else {
+    data.weeks.push({ key: wkey, label, count: next });
+  }
+
+  saveData(data);
+  bump(delta);
+  updateUI();
+}
+
+function markReturned() {
+  if (data.current === 0) { showToast('Нет бутылок для сдачи'); return; }
+  document.getElementById('returnCount').textContent = data.current;
+  openModal('returnModal');
+}
+
+function doReturn() {
+  const c = data.current;
+  data.totalReturned += c;
+  data.moneyReturned += c * PRICE;
+
+  // Stamp week as "returned"
+  const wkey = getCurrentWeekKey();
+  const idx = data.weeks.findIndex(w => w.key === wkey);
+  if (idx >= 0) { data.weeks[idx].returned = true; }
+
+  data.current = 0;
+  saveData(data);
+  closeModal('returnModal');
+  updateUI();
+  showToast(`✅ Сдано ${c} бут. · +₪${(c * PRICE).toFixed(2)}`);
+}
+
+function showResetModal() { openModal('resetModal'); }
+
+function doReset() {
+  data = defaultData();
+  saveData(data);
+  closeModal('resetModal');
+  updateUI();
+  showToast('Данные сброшены');
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
+});
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function buildChartData() {
+  const weeks = data.weeks.slice(-8);
+  const labels = weeks.map(w => w.label);
+  const counts = weeks.map(w => w.count);
+  const colors = weeks.map(w =>
+    w.returned ? '#22c55e' : '#a78bfa'
+  );
+  return { labels, counts, colors };
+}
+
+function initChart() {
+  const ctx = document.getElementById('chart').getContext('2d');
+  const { labels, counts, colors } = buildChartData();
+
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: counts,
+        borderColor: '#a78bfa',
+        borderWidth: 2.5,
+        pointBackgroundColor: colors,
+        pointBorderColor: colors,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        fill: true,
+        backgroundColor: (ctx) => {
+          const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 160);
+          g.addColorStop(0, '#a78bfa33');
+          g.addColorStop(1, '#a78bfa00');
+          return g;
+        },
+        tension: 0.35,
+      }]
+    },
+    options: {
+      animation: { duration: 500 },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1e24',
+          borderColor: '#2a2a35',
+          borderWidth: 1,
+          titleColor: '#e8e8f0',
+          bodyColor: '#a78bfa',
+          titleFont: { family: 'Space Mono', size: 10 },
+          bodyFont: { family: 'Space Mono', size: 12, weight: 'bold' },
+          callbacks: {
+            label: ctx => ` ${ctx.raw} бут. · ₪${(ctx.raw * PRICE).toFixed(2)}`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#2a2a3533', drawBorder: false },
+          ticks: { color: '#6b6b80', font: { family: 'Space Mono', size: 9 } }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: '#2a2a3533', drawBorder: false },
+          ticks: {
+            color: '#6b6b80',
+            font: { family: 'Space Mono', size: 9 },
+            maxTicksLimit: 5,
+            stepSize: 1,
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+}
+
+function updateChart() {
+  if (!chart) return;
+  const { labels, counts, colors } = buildChartData();
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = counts;
+  chart.data.datasets[0].pointBackgroundColor = colors;
+  chart.data.datasets[0].pointBorderColor = colors;
+  chart.update();
+}
+
+// Swipe to change count
+let touchStartY = 0, touchStartX = 0;
+document.addEventListener('touchstart', e => {
+  touchStartY = e.touches[0].clientY;
+  touchStartX = e.touches[0].clientX;
+}, { passive: true });
+document.addEventListener('touchend', e => {
+  const dy = touchStartY - e.changedTouches[0].clientY;
+  const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
+  // only vertical swipe on counter area
+  if (dx > 40) return;
+  if (dy > 60) changeCount(1);
+  else if (dy < -60) changeCount(-1);
+}, { passive: true });
+
+window.addEventListener('load', () => {
+  initChart();
+  updateUI();
+});
+</script>
+</body>
+    </html> 
