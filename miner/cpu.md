@@ -22,3 +22,6 @@ if ($dir) { Set-Location $dir.FullName } else { Set-Location .\moneroocean }
 ```
 
 Все команды тут работают на процессор а не на видео карту
+
+
+bc1pk0002k365jrczcjsk58tkge85e89u95ypjt09mf7lg0kn2ea5ggqr9hrcr
