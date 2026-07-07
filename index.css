@@ -96,9 +96,24 @@ a:hover {
 /* --- HERO SECTION --- */
 .hero {
     text-align: center;
-    padding: 6rem 5% 4rem;
-    max-width: 900px;
-    margin: 0 auto;
+    padding: 6rem 5%;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('banner.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 3rem;
+    border: 3px solid #ffffff;
+    background-color: rgba(33, 37, 41, 0.7); /* Темный полупрозрачный фон, чтобы текст легко читался на картинке */
+    color: #ffffff;
 }
 
 .hero h1 {
@@ -112,7 +127,7 @@ a:hover {
 .hero p {
     font-size: 1.5rem;
     font-weight: 500;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 /* --- SERVICES SECTION --- */
