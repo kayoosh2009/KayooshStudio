@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayoosh Studio - Beautiful Websites for Small Businesses</title>
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-color: #F1FAEE;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(33, 37, 41, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        a:hover {
+            opacity: 0.7;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 5%;
+            border-bottom: 1px solid rgba(241, 250, 238, 0.1);
+            position: sticky;
+            top: 0;
+            background-color: #212529;
+            color: #F1FAEE;
+            z-index: 100;
+        }
+
+        .navbar a {
+            color: #F1FAEE;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #F1FAEE;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .nav-lang {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border: 1px solid #F1FAEE;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 6rem 5% 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        /* --- SERVICES SECTION --- */
+        .services {
+            padding: 4rem 5%;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(33, 37, 41, 0.1);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(33, 37, 41, 0.1);
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* --- PRICING SECTION --- */
+        .pricing {
+            text-align: center;
+            padding: 5rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-box {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            padding: 3rem 2rem;
+            border-radius: 24px;
+        }
+
+        .pricing-box h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .pricing-box p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-contact:hover {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            margin-top: auto;
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(241, 250, 238, 0.1);
+            text-align: center;
+            background-color: #212529;
+            color: #F1FAEE;
+        }
+
+        .footer a {
+            color: #F1FAEE;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .footer-contacts a {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-links a:not(.nav-lang) {
+                display: none; /* Скрываем ссылки на мобилках, оставляем только бургер/язык */
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .pricing-box h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <div class="nav-logo-icon">K</div>
+            <span>Kayoosh Studio</span>
+        </div>
+        <div class="nav-links">
+            <a href="#clients">Client Sites</a>
+            <a href="#contacts">Contacts</a>
+            <div class="nav-lang">
+                EN <!-- Здесь будет иконка бургер-меню для выбора языка -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>Don't you want a beautiful website for your business or project?</h1>
+        <p>Creating websites quickly, beautifully, and affordably!</p>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services" id="services">
+        <h2>What I can create for you</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>One-Page Business Site</h3>
+                <p>A clean, modern landing page for your business, hosted on a free <strong>.web.app</strong> domain.</p>
+            </div>
+            <div class="service-card">
+                <h3>Digital Restaurant Menu</h3>
+                <p>Interactive digital menus with prices, descriptions, and photos. Perfect for cafes and restaurants.</p>
+            </div>
+            <div class="service-card">
+                <h3>Freelance Portfolio</h3>
+                <p>Showcase your work, skills, and case studies to attract new clients and grow your personal brand.</p>
+            </div>
+            <div class="service-card">
+                <h3>Event Landing Page</h3>
+                <p>A dedicated page for your event, webinar, or masterclass with registration and all the details.</p>
+            </div>
+            <div class="service-card">
+                <h3>"Link in Bio" Page</h3>
+                <p>A beautiful custom page for your Instagram or TikTok bio, replacing standard link aggregators.</p>
+            </div>
+            <div class="service-card">
+                <h3>Custom Project</h3>
+                <p>Have a unique idea? Let's discuss it! I build tailored web solutions for any small business need.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section class="pricing" id="contacts">
+        <div class="pricing-box">
+            <h2>Worried about the price?</h2>
+            <p>Don't be! Contact me, and we will work out a deal that perfectly fits your budget.</p>
+            <a href="mailto:kayoosh2009@gmail.com" class="btn-contact">Let's Discuss the Price</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-name">Kai Klimenko</div>
+            <div class="footer-contacts">
+                <a href="tel:+97253541783">+972 53-541-783</a>
+                <a href="mailto:kayoosh2009@gmail.com">kayoosh2009@gmail.com</a>
+            </div>
+            <div class="footer-socials">
+                <a href="https://x.com" target="_blank">X (Twitter)</a>
+                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            </div>
+            <div class="copyright">© 2026 Kayoosh Studio. All rights reserved.</div>
+        </div>
+    </footer>
+
+</body>
+</html>
