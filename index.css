@@ -96,10 +96,10 @@ a:hover {
 /* --- HERO SECTION --- */
 .hero {
     text-align: center;
-    padding: 6rem 5%;
+    padding: 4rem 5%;          /* Уменьшили внутренние отступы сверху и снизу */
     width: 100%;
-    aspect-ratio: 16 / 9;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('banner.png');
+    min-height: 40vh;          /* Вместо 16:9 делаем аккуратную высоту в 40% от экрана */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), url('banner.png'); /* Светлый фильтр поверх фото */
     background-size: cover;
     background-position: center;
     display: flex;
@@ -109,11 +109,11 @@ a:hover {
 }
 
 .hero-content {
-    max-width: 800px;
-    padding: 3rem;
-    border: 3px solid #ffffff;
-    background-color: rgba(33, 37, 41, 0.7); /* Темный полупрозрачный фон, чтобы текст легко читался на картинке */
-    color: #ffffff;
+    max-width: 750px;
+    padding: 2.5rem 3rem;
+    border: 3px solid var(--text-color); /* Темная рамка */
+    background-color: rgba(255, 255, 255, 0.85); /* Светлый полупрозрачный фон */
+    color: var(--text-color);            /* Темный текст */
 }
 
 .hero h1 {
